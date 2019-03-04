@@ -1,0 +1,13 @@
+h1, 
+.text_red{
+    color: red;
+
+}
+
+#top{
+    font-size: 100px;
+}
+
+[type = "text"]{
+    color: blue;
+}
