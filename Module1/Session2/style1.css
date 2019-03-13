@@ -5,10 +5,11 @@ span {
     width: 100px;
     display: inline-block;
     padding-top: 5px;
+    position: relative;
     
     
 }
-nav span:hover{
+nav span:hover, .submenu:hover{
     background-color: #9CD08F;
     color: #FFFFFF;
 }
@@ -21,4 +22,17 @@ nav span:hover{
     width:100px;
     background-color: #D5B0AC;
     text-align: center;
+    display: block;
+}
+.menu .submenu{
+    display: none;
+    position: absolute;
+    left:0%;
+}
+.menu span:hover > .menu.submenu{
+    display: block;
+}
+.menu.submenu{
+    left: 100%;
+    top:0;
 }
