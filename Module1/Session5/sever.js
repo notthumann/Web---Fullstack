@@ -45,6 +45,40 @@ app.put("/editquestion", (req,res)=> {
     fs.writeFileSync("./questions.json", JSON.stringify(questionList));
 });
 
+app.get("/vote/:questionId/yes", (req, res) => {
+	const questionList = JSON.parse(fs.readFileSync("./questions.json", "utf-8"));
+	const questionId = req.params.questionId;
+	questionList[questionId].yes = Number(questionList[questionId].yes) + 1;
+	console.log(questionList);
+	fs.writeFileSync("./questions.json", JSON.stringify(questionList));
+	res.redirect(
+        '/question/' + questionId
+    );
+});
+
+app.get("/vote/:questionId/no", (req, res) => {
+	const questionList = JSON.parse(fs.readFileSync("./questions.json", "utf-8"));
+	const questionId = req.params.questionId;
+	questionList[questionId].no = Number(questionList[questionId].no) + 1;
+	console.log(questionList);
+	fs.writeFileSync("./questions.json", JSON.stringify(questionList));
+	res.redirect(
+        '/question/' + questionId
+    );
+});
+app.get("question/:questionId",(req,res) =>{
+    const questionList = JSON.parse(fs.readFileSync("./questions.json", "utf-8"));
+    const questionId = req.params.questionId;
+    const question = questionList[questionId];
+    const content = question.content;
+    const yesPer = Math.round((question.yes / (question.yes + question.no))*100);
+    const noPer = 100 - yesPer;
+    res.send("Question: " + content + "Yes" + yesPer + "No" + noPer);
+
+})
+
+
+
 app.listen(3000, (err) =>{
     if(err) console.log(err)
     else console.log('Server start!!');
