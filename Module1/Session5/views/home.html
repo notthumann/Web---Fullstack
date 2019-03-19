@@ -58,10 +58,11 @@
 			url: '/randomquestion',
 			success: function(questionData) {
 				console.log(questionData)
-				$('h1').text(questionData.content);
-				$('#yes').attr("href", `/vote/${questionData.id}/yes`);
-                $('#no').attr("href", `/vote/${questionData.id}/no`);
-                $('#vote-result').attr("href", `/question/${questionData.id}`);
+                $('h1').text(questionData.content);
+                console.log(questionData._id);
+				$('#yes').attr("href", `/vote/${questionData._id}/yes`);
+                $('#no').attr("href", `/vote/${questionData._id}/no`);
+                $('#vote-result').attr("href", `/question/${questionData._id}`);
 				question = questionData;
 			}
 		});

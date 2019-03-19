@@ -11,10 +11,10 @@ mongoose.connect(
     (err)=>{
         if(err) console.log(err)
         else console.log("Connect to DB success");
-        QuestionModel.find({ }, (err, docs) =>{
-            if(err) console.log(docs);
-            else console.log(docs);           
-        })
+        // QuestionModel.find({ }, (err, docs) =>{
+        //     if(err) console.log(docs);
+        //     else console.log(docs);           
+        // })
     }
 );
 
@@ -25,9 +25,14 @@ app.get('/', (req,res) => {
 });
 
 app.get('/randomquestion',(req,res) => {
-    const questionList = JSON.parse(fs.readFileSync('./questions.json','utf-8'));
-    const randomQuestion = questionList[Math.floor(Math.random()*questionList.length)];
-    res.send(randomQuestion);
+    QuestionModel.find({ }, (err, docs) => {
+        if(err) console.log(err)
+        else {
+            const questionList = docs;
+            const randomQuestion = questionList[Math.floor(Math.random()*questionList.length)];
+            res.send(randomQuestion);
+        }
+    });
 });
 
 app.get('/ask', (req,res) => {
@@ -54,32 +59,60 @@ app.post('/addquestion',(req,res)=>{
 });
 
 app.put("/editquestion", (req,res)=> {
-    const questionList = JSON.parse(fs.readFileSync('./questions.json','utf-8'));
-    const question = req.body;
-    questionList[question.id] = question;
-    fs.writeFileSync("./questions.json", JSON.stringify(questionList));
+    QuestionModel.find({ }, (err, docs) => {
+       if(err) console.log(err)
+       else {
+           const answer = req.body;
+           for (i= 0; i < questionList.length; i++){
+                if (docs[i].id = answer.id){
+                    docs[i] = answer;
+                    console.log(docs[i]);
+                    docs[i].save();
+                }
+           }
+           
+       } 
+    });
 });
 
 app.get("/vote/:questionId/yes", (req, res) => {
-	const questionList = JSON.parse(fs.readFileSync("./questions.json", "utf-8"));
-	const questionId = req.params.questionId;
-	questionList[questionId].yes = Number(questionList[questionId].yes) + 1;
-	console.log(questionList);
-	fs.writeFileSync("./questions.json", JSON.stringify(questionList));
-	res.redirect(
-        `/question/${questionId}`
-    );
+	QuestionModel.find({}, (err, docs) => {
+        const questionId = req.params.questionId;
+        for(i= 0; i < docs.length; i++){
+            if (docs[i].id = questionId){
+                docs[i].yes = Number(docs[i].yes) + 1;
+                console.log(docs[i]);
+                docs[i].save();
+            }
+        
+        res.redirect(
+            `/question/${questionId}`
+        );
+       }
+    })
+	
 });
 
+
 app.get("/vote/:questionId/no", (req, res) => {
-	const questionList = JSON.parse(fs.readFileSync("./questions.json", "utf-8"));
-	const questionId = req.params.questionId;
-	questionList[questionId].no = Number(questionList[questionId].no) + 1;
-	console.log(questionList);
-	fs.writeFileSync("./questions.json", JSON.stringify(questionList));
-	res.redirect(
-        `/question/${questionId}`
-    );
+	QuestionModel.find({}, (err, docs) => {
+        if(err) console.log(err)
+        else{
+            const questionId = req.params.questionId;
+        for(i= 0; i < docs.length; i++){
+            if (docs[i].id = questionId){
+                docs[i].no = Number(docs[i].no) + 1;
+                console.log(docs[i]);
+                docs[i].save();
+            }
+        
+        res.redirect(
+            `/question/${questionId}`
+        );
+        }
+       }
+    })
+	
 });
 app.get("/question/:questionId",(req,res) =>{
     // const questionList = JSON.parse(fs.readFileSync("./questions.json", "utf-8"));
@@ -94,10 +127,23 @@ app.get("/question/:questionId",(req,res) =>{
 });
 
 app.get("/detail/:questionId", (req, res) =>{
-    const questionId = req.params.questionId;
-    const questionList = JSON.parse(fs.readFileSync("./questions.json", "utf-8"));
-    const question = questionList[questionId];
-    res.send(question);
+    QuestionModel.find({}, (err,docs) => {
+        if(err) console.log(err);
+        else{
+        const questionId = req.params.questionId;
+        for(i = 0; i < docs.length; i ++){
+            if(docs[i].id = questionId){
+                const question = docs[i]
+                res.send(question);
+            }
+        }
+        
+    }
+    })
+    // 
+    // const questionList = JSON.parse(fs.readFileSync("./questions.json", "utf-8"));
+    // const question = questionList[questionId];
+    // res.send(question);
 })
 
 
