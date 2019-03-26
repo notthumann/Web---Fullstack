@@ -10,57 +10,100 @@
 			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
               crossorigin="anonymous">
     </script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <img src="logo-coral.svg" alt="logo">
-    <form action="/" method="POST" >
-        <input type="text" id = "search">
-        <button type = 'button'> Tìm kiếm </button>
-    </form>
-    <div id = 'big'>
-        <div id = 'data'></div>
+    <div id = 'container'>
+        <img src="logo-coral.svg" alt="logo">
+        <form action="/" method="POST" >
+            <input type="text" id = "search">
+            <button type = 'button'> Tìm kiếm </button>
+        </form>
     </div>
+    
+    
+    <div id = 'data'>
+    </div>
+    <div class="lds-circle"><div></div></div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <script>
         let nextUrl = '';
-        let search = '';
-        search = $('#search').val()
+        
         $("button").on("click", () =>{
+            $('#data').html('');
+            let search = $('#search').val()
+            console.log(search);
             $.ajax({
-            type:'GET',
             url:'http://api.techkids.vn/udemy/courses?page=1&page_size=12&search=' + search,
             success: function(data){
                 console.log(data);
                 console.log(data.results);
                 nextUrl = data.next;
                 for (let i = 0; i < data.results.length; i++){
-                    $('#data').append('<img id = "img1" src="" alt="">','<p id = "name"></p>','<p id = "price"></p>');
-                    $('#img1').attr('id', 'img' + i)
-                    $("#name").attr('id',i)
-                    $('#' + i).text(data.results[i].title);
-                    $('#img' + i).attr('src', data.results[i].image_240x135)
+                    const result =  `<img src="${data.results[i].image_240x135}" alt="" id="img">
+                                    <p>Title: ${data.results[i].title} </p>
+                                    <p>Price : ${data.results[i].price}</p>`;
+                    $("#data").append(result);
+                    // $('#data').append('<img id = "img1" src="" alt="">','<p id = "name"></p>','<p id = "price"></p>');
+                    // $('#img1').attr('id', 'img' + i)
+                    // $("#name").attr('id',i)
+                    // $('#' + i).text(data.results[i].title);
+                    // $('#img' + i).attr('src', data.results[i].image_240x135)
                     // $('#big').append($('#data'))
                 }   
             }
         });
 })
-        $('input').change(function(){
-            $('#data').remove('img');
-            $('#data').remove('p');
-        });
         $(window).scroll(function() {
-            if($(window).scrollTop() + $(window).height() == $(document).height()) {
+            if(($(document).height() - $(window).height() - $(window).scrollTop() < 400)) {
+                // $('.lds-ring').attr('visibility','visible');
                 $.ajax({
                     type:'GET',
                     url:nextUrl,
                     success: function(data){
                     for (let i = 0; i < data.results.length; i++){
-                        $('#data').append('<img id = "img1" src="" alt="">','<p id = "name"></p>','<p id = "price"></p>');
-                        $('#img1').attr('id', 'img' + i)
-                        $("#name").attr('id',i)
-                        $('#' + i).text(data.results[i].title);
-                        $('#img' + i).attr('src', data.results[i].image_240x135)
+                        const result =  `<img src="${data.results[i].image_240x135}" alt="" id="img">
+                                    <p>Title: ${data.results[i].title} </p>
+                                    <p>Price : ${data.results[i].price}</p>`;
+                        $("#data").append(result);
+                        // $('#data').append('<img id = "img1" src="" alt="">','<p id = "name"></p>','<p id = "price"></p>');
+                        // $('#img1').attr('id', 'img' + i)
+                        // $("#name").attr('id',i)
+                        // $('#' + i).text(data.results[i].title);
+                        // $('#img' + i).attr('src', data.results[i].image_240x135)
                         // $('#big').append($('#data'))
                         }                
+                    },
+                    complete: function(){
+                        // $('.lds-ring').attr('visibility','hidden')
                     }
                 });
             }});
