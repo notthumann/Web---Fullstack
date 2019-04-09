@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ScoreKeeper</title>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+    <style>
+        body{
+            background-color: #FBFEF9;
+        }
+        .container{
+            text-emphasis-color: #333333;
+            font-size: 30px;
+        }
+        .btn{
+            background: #BF1363;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>ScoreKeeper</p>
+    </div>  
+    <hr/>
+    <form action="/game-data" method="PUT" >
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col" >Player 1</th>
+                    <th scope="col" >Player 2</th>
+                    <th scope="col" >Player 3</th>
+                    <th scope="col" >Player 4</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Sum of Score(0)</th>
+                    <td id = 'sum1'></td>
+                    <td id = 'sum2'></td>
+                    <td id = 'sum3'></td>
+                    <td id = 'sum4'></td>
+                </tr>
+            </tbody>
+        </table>
+        <button id = submitbtn class="btn">ADD ROUND</button>
+    </form>
+    <script>
+        let i = 0;
+        let game;
+        const gameId = window.location.pathname.split('/')[2];
+        const sumUpdate = function(){
+            $.ajax({
+                    url: `/gameDetail/${gameId}`,
+                    type: "GET",
+                    success: (data) => {
+                        let player1Sum = 0;
+                        let player2Sum = 0;
+                        let player3Sum = 0;
+                        let player4Sum = 0;
+                        const player1Score = data.player1.roundScore;
+                        const player2Score = data.player2.roundScore;
+                        const player3Score = data.player3.roundScore;
+                        const player4Score = data.player4.roundScore;
+                        for (let i = 0; i < player1Score.length; i++) {
+                            player1Sum += Number(player1Score[i]);
+                        }
+                        for (let i = 0; i < player2Score.length; i++) {
+                            player2Sum += Number(player2Score[i]);
+                        }
+                        for (let i = 0; i < player3Score.length; i++) {
+                            player3Sum += Number(player3Score[i]);
+                        }
+                        for (let i = 0; i < player4Score.length; i++) {
+                            player4Sum += Number(player4Score[i]);
+                        }
+                        console.log(player1Sum)
+                        $("#sum1").text(`${player1Sum}`);
+                        $("#sum2").text(`${player2Sum}`);
+                        $("#sum3").text(`${player3Sum}`);
+                        $("#sum4").text(`${player4Sum}`);
+                    }
+                })
+        }
+        $('#submitbtn').on('click', function(event){
+            $('tbody').append(
+                        `
+                        <tr>
+                            <th scope="row">Round `+ i +`</th>
+                            <td>
+                                <input type="text" name="round` + i + `p1" id="">
+                            </td>
+                            <td>
+                                <input type="text" name="round` + i + `p2" id="">
+                            </td>
+                            <td>
+                                <input type="text" name="round`+ i +`p3" id="">
+                            </td>
+                            <td>
+                                <input type="text" name="round` +i+ `p4" id="">
+                            </td>  
+                        </tr>
+                        `
+                    )
+        })
+    </script>
+</body>
+</html>
+<!-- $('tbody').after(
+                        `
+                        <tr>
+                            <th scope="row">Round 1</th>
+                            <td>
+                                <input type="text" name="round`+a+`p1" id="">
+                            </td>
+                            <td>
+                                <input type="text" name="round`+a+`p2" id="">
+                            </td>
+                            <td>
+                                <input type="text" name="round`+a+`p3" id="">
+                            </td>
+                            <td>
+                                <input type="text" name="round`+a+`p4" id="">
+                            </td>  
+                        </tr>
+                        `
+                    ) -->
