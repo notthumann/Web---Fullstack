@@ -4,110 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Udemy</title>
-    <script
-			  src="http://code.jquery.com/jquery-3.3.1.min.js"
-			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-              crossorigin="anonymous">
-    </script>
-    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id = 'container'>
-        <img src="logo-coral.svg" alt="logo">
-        <form action="/" method="POST" >
-            <input type="text" id = "search">
-            <button type = 'button'> Tìm kiếm </button>
-        </form>
+    <div><img src="https://www.udemy.com/staticx/udemy/images/v6/logo-coral.svg" alt=""></div>
+    <div>
+        <input type="text" placeholder="keyword" id="keyword">
+        <button id="search">search</button>
+        <div id="content"></div>
     </div>
-    
-    
-    <div id = 'data'>
-    </div>
-    <div class="lds-circle"><div></div></div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <script>
         let nextUrl = '';
-        
-        $("button").on("click", () =>{
-            $('#data').html('');
-            let search = $('#search').val()
-            console.log(search);
+        let preLoad = true;
+
+        $('#search').on('click', ()=>{
+            $('#content').html('');
+            const key = $('#keyword').val();
+            console.log(key);
+            
             $.ajax({
-            url:'http://api.techkids.vn/udemy/courses?page=1&page_size=12&search=' + search,
-            success: function(data){
-                console.log(data);
-                console.log(data.results);
-                nextUrl = data.next;
-                for (let i = 0; i < data.results.length; i++){
-                    const result =  `<img src="${data.results[i].image_240x135}" alt="" id="img">
-                                    <p>Title: ${data.results[i].title} </p>
-                                    <p>Price : ${data.results[i].price}</p>`;
-                    $("#data").append(result);
-                    // $('#data').append('<img id = "img1" src="" alt="">','<p id = "name"></p>','<p id = "price"></p>');
-                    // $('#img1').attr('id', 'img' + i)
-                    // $("#name").attr('id',i)
-                    // $('#' + i).text(data.results[i].title);
-                    // $('#img' + i).attr('src', data.results[i].image_240x135)
-                    // $('#big').append($('#data'))
-                }   
-            }
-        });
-})
-        $(window).scroll(function() {
-            if(($(document).height() - $(window).height() - $(window).scrollTop() < 400)) {
-                // $('.lds-ring').attr('visibility','visible');
-                $.ajax({
-                    type:'GET',
-                    url:nextUrl,
-                    success: function(data){
-                    for (let i = 0; i < data.results.length; i++){
-                        const result =  `<img src="${data.results[i].image_240x135}" alt="" id="img">
-                                    <p>Title: ${data.results[i].title} </p>
-                                    <p>Price : ${data.results[i].price}</p>`;
-                        $("#data").append(result);
-                        // $('#data').append('<img id = "img1" src="" alt="">','<p id = "name"></p>','<p id = "price"></p>');
-                        // $('#img1').attr('id', 'img' + i)
-                        // $("#name").attr('id',i)
-                        // $('#' + i).text(data.results[i].title);
-                        // $('#img' + i).attr('src', data.results[i].image_240x135)
-                        // $('#big').append($('#data'))
-                        }                
-                    },
-                    complete: function(){
-                        // $('.lds-ring').attr('visibility','hidden')
+                url: `https://api.techkids.vn/udemy/courses?search=` + key + `&page=1&page_size=12`,
+                success: (data) => {
+                    console.log(data);
+                    nextUrl = data.next;
+                    const dataList = data.results;
+                    for (let i = 0; i < data.length; i++){
+                        const text = `<img src="${dataList[i].visible_instructors[0].image_50x50}" alt="" id="img">
+                                <p>Title: ${dataList[i].title} </p>
+                                <p>Price : ${dataList[i].price}</p>`
+                        $('#content').append(text);
                     }
-                });
-            }});
-        
+                }
+            })
+        })
     </script>
 </body>
 </html>

@@ -1,0 +1,36 @@
+.rectangle{
+    width: 40px;
+    height: 40px;  
+    border-radius: 4px;
+    margin-right: 22px;
+    border: none;
+}
+
+.green{
+    background: #04A928;
+}
+.red{
+    background: #B10202;
+}
+
+.sign{
+    width: 40px;
+    height: 40px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: normal;
+    text-align: center;
+
+    color: #FFFFFF;
+
+}
+.point{
+    margin-right: 22px;
+}
+
+.container {
+    display: flex;
+    flex-flow: row;
+}

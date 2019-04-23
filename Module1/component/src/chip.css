@@ -1,11 +1,21 @@
 .chip-background {
     width: 80px;
     height: 32px;
-    background-color: #BE0000;
     border-radius: 16px;
     line-height: 32px;
     text-align: center;
     color: #ffffff;
     font-size: 14px;
     margin-bottom: 8px;
+}
+
+.failed{
+    background-color:#BE0000
+}
+.passed{
+    background-color:green;
+}
+
+.untested{
+    background-color: gray;
 }
